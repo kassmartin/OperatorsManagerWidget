@@ -3,6 +3,7 @@
 
 #include "OperatorsManagerWidget.hpp"
 #include "ui_OperatorsManagerWidget.h"
+#include "OperatorEditDialog.hpp"
 
 OperatorsManagerWidget::OperatorsManagerWidget(QWidget *parent)
     : QWidget(parent), ui(new Ui::OperatorsManagerWidget), pAddButtonPtr(nullptr)
@@ -18,7 +19,15 @@ OperatorsManagerWidget::~OperatorsManagerWidget()
 
 void OperatorsManagerWidget::onAddOperatorButtonClicked()
 {
+    // TODO: Fill OperatorData
+    OperatorData data {
+        .name = "Oper",
+        .mcc = 2,
+        .mnc = 2
+    };
 
+    auto dialog = std::make_unique<OperatorEditDialog>(new OperatorEditDialog(data, this));
+    dialog->exec();
 }
 
 void OperatorsManagerWidget::createFloatingAddOperatorButton()
