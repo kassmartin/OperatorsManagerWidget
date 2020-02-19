@@ -80,15 +80,16 @@ void OperatorsTreeModel::modelFromDatabase(const DBManager &database)
         QString country = query.value(0).toString();
         if (currentCountry == nullptr ||
             country != currentCountry->data(0)) {
-            currentCountry = new TreeNode({
+            currentCountry = new TreeNode(TreeNode::Country, {
                 country,
                 query.value(2).toString(),
                 query.value(1).toInt()
             }, pRootItem.get());
             pRootItem->appendChild(currentCountry);
         }
-        auto newOperator = new TreeNode({
+        auto newOperator = new TreeNode(TreeNode::Operator, {
             query.value(5).toString(),
+            query.value(1).toInt(),
             query.value(4).toInt(),
             query.value(3).toInt()
         }, currentCountry);

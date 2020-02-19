@@ -6,7 +6,14 @@
 class TreeNode
 {
 public:
-    explicit TreeNode(const QList<QVariant> &data = {}, TreeNode *parentNode = nullptr);
+    enum NodeType {
+        Country = 0,
+        Operator,
+        TypeCount
+    };
+
+public:
+    explicit TreeNode(NodeType pType = Country, const QList<QVariant> &data = {}, TreeNode *parentNode = nullptr);
     ~TreeNode();
 
     void appendChild(TreeNode *child);
@@ -18,9 +25,11 @@ public:
     QString data(int number) const;
     int row() const;
     TreeNode* parentNode();
+    NodeType type() const;
 
 private:
     QList<TreeNode*> pChildItems;
     QList<QVariant> pNodeData;
     TreeNode* pParentNode;
+    NodeType pType;
 };

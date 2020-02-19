@@ -5,6 +5,7 @@
 #include "ui_OperatorsManagerWidget.h"
 #include "OperatorEditDialog.hpp"
 #include "OperatorsTreeModel/OperatorsTreeModel.hpp"
+#include "OperatorsTreeModel/LabelViewDelegate.hpp"
 
 OperatorsManagerWidget::OperatorsManagerWidget(QWidget *parent)
     : QWidget(parent), ui(new Ui::OperatorsManagerWidget), pAddButtonPtr(nullptr)
@@ -44,6 +45,8 @@ void OperatorsManagerWidget::createFloatingAddOperatorButton()
 void OperatorsManagerWidget::setViewModel()
 {
     auto model = new OperatorsTreeModel(pDBManager, ui->operatorsTreeView);
+
+    ui->operatorsTreeView->setItemDelegate(new LabelViewDelegate(ui->operatorsTreeView));
     ui->operatorsTreeView->setModel(model);
 }
 

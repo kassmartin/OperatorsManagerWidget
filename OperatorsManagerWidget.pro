@@ -17,6 +17,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     OperatorEditDialog.cpp \
+    OperatorsTreeModel/DelegatePainters/CountryPainter.cpp \
+    OperatorsTreeModel/DelegatePainters/OperatorPainter.cpp \
+    OperatorsTreeModel/LabelViewDelegate.cpp \
     OperatorsTreeModel/OperatorsTreeModel.cpp \
     OperatorsTreeModel/TreeNode.cpp \
     main.cpp \
@@ -27,6 +30,10 @@ HEADERS += \
     OperatorEditDialog.hpp \
     OperatorsManagerWidget.hpp \
     DBManager.hpp \
+    OperatorsTreeModel/DelegatePainters/AbstractPainter.hpp \
+    OperatorsTreeModel/DelegatePainters/CountryPainter.hpp \
+    OperatorsTreeModel/DelegatePainters/OperatorPainter.hpp \
+    OperatorsTreeModel/LabelViewDelegate.hpp \
     OperatorsTreeModel/OperatorsTreeModel.hpp \
     OperatorsTreeModel/TreeNode.hpp
 

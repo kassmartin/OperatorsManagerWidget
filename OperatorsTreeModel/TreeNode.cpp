@@ -1,7 +1,7 @@
 #include "TreeNode.hpp"
 
-TreeNode::TreeNode(const QList<QVariant> &data, TreeNode *parent)
-    : pNodeData(std::move(data)), pParentNode(parent)
+TreeNode::TreeNode(NodeType type, const QList<QVariant> &data, TreeNode *parent)
+    : pNodeData(std::move(data)), pParentNode(parent), pType(type)
 {}
 
 TreeNode::~TreeNode()
@@ -66,6 +66,11 @@ QString TreeNode::data(int number) const
 TreeNode *TreeNode::parentNode()
 {
     return pParentNode;
+}
+
+TreeNode::NodeType TreeNode::type() const
+{
+    return pType;
 }
 
 int TreeNode::row() const
