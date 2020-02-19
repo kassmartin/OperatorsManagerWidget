@@ -4,12 +4,15 @@
 #include "OperatorsManagerWidget.hpp"
 #include "ui_OperatorsManagerWidget.h"
 #include "OperatorEditDialog.hpp"
+//#include "OperatorsTreeModel/OperatorsTreeModel.hpp"
 
 OperatorsManagerWidget::OperatorsManagerWidget(QWidget *parent)
     : QWidget(parent), ui(new Ui::OperatorsManagerWidget), pAddButtonPtr(nullptr)
+    , pDBManager("system.db", this)
 {
     ui->setupUi(this);
     createFloatingAddOperatorButton();
+    //setViewModel();
 }
 
 OperatorsManagerWidget::~OperatorsManagerWidget()
@@ -19,14 +22,7 @@ OperatorsManagerWidget::~OperatorsManagerWidget()
 
 void OperatorsManagerWidget::onAddOperatorButtonClicked()
 {
-    // TODO: Fill OperatorData
-    OperatorData data {
-        .name = "Oper",
-        .mcc = 2,
-        .mnc = 2
-    };
-
-    auto dialog = std::make_unique<OperatorEditDialog>(new OperatorEditDialog(data, this));
+    auto dialog = std::make_unique<OperatorEditDialog>(new OperatorEditDialog(this));
     dialog->exec();
 }
 
@@ -45,10 +41,16 @@ void OperatorsManagerWidget::createFloatingAddOperatorButton()
             this, &OperatorsManagerWidget::onAddOperatorButtonClicked);
 }
 
+//void OperatorsManagerWidget::setViewModel()
+//{
+//    auto model = new OperatorsTreeModel(pDBManager, ui->operatorsTreeView);
+//    ui->operatorsTreeView->setModel(model);
+//}
+
 void OperatorsManagerWidget::resizeEvent(QResizeEvent *event)
 {
-    const int buttonWidgetSizeOffset = 24;
-    const QSize windowSize = event->size();
+    const int buttonWidgetSizeOffset = 8;
+    const QSize windowSize = ui->operatorsTreeView->size();
 
     pAddButtonPtr->move(windowSize.width() - (pAddButtonPtr->width() + buttonWidgetSizeOffset),
                         windowSize.height() - (pAddButtonPtr->height() + buttonWidgetSizeOffset));

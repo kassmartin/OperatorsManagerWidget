@@ -2,6 +2,8 @@
 
 #include <QWidget>
 
+#include "DBManager.hpp"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class OperatorsManagerWidget; }
 QT_END_NAMESPACE
@@ -29,6 +31,8 @@ private:
     /// Initializes floating button for operators adding.
     void createFloatingAddOperatorButton();
 
+    //void setViewModel();
+
 protected:
     /// Resize event override includes floating button movement.
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
@@ -36,5 +40,6 @@ protected:
 private:
     Ui::OperatorsManagerWidget *ui;
     QPushButton *pAddButtonPtr;
+    DBManager pDBManager;
 
 };

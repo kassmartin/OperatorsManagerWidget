@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -17,12 +17,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     OperatorEditDialog.cpp \
+    #OperatorsTreeModel/OperatorsTreeModel.cpp \
+    #OperatorsTreeModel/TreeNode.cpp \
     main.cpp \
-    OperatorsManagerWidget.cpp
+    OperatorsManagerWidget.cpp \
+    DBManager.cpp
 
 HEADERS += \
     OperatorEditDialog.hpp \
-    OperatorsManagerWidget.hpp
+    OperatorsManagerWidget.hpp \
+    DBManager.hpp
+    #OperatorsTreeModel/OperatorsTreeModel.hpp \
+    #OperatorsTreeModel/TreeNode.hpp
 
 FORMS += \
     OperatorEditDialog.ui \
