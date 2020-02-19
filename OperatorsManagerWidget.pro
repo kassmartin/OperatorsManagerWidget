@@ -17,8 +17,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     OperatorEditDialog.cpp \
-    #OperatorsTreeModel/OperatorsTreeModel.cpp \
-    #OperatorsTreeModel/TreeNode.cpp \
+    OperatorsTreeModel/OperatorsTreeModel.cpp \
+    OperatorsTreeModel/TreeNode.cpp \
     main.cpp \
     OperatorsManagerWidget.cpp \
     DBManager.cpp
@@ -26,9 +26,9 @@ SOURCES += \
 HEADERS += \
     OperatorEditDialog.hpp \
     OperatorsManagerWidget.hpp \
-    DBManager.hpp
-    #OperatorsTreeModel/OperatorsTreeModel.hpp \
-    #OperatorsTreeModel/TreeNode.hpp
+    DBManager.hpp \
+    OperatorsTreeModel/OperatorsTreeModel.hpp \
+    OperatorsTreeModel/TreeNode.hpp
 
 FORMS += \
     OperatorEditDialog.ui \

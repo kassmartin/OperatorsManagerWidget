@@ -31,7 +31,7 @@ private:
     /// Initializes floating button for operators adding.
     void createFloatingAddOperatorButton();
 
-    //void setViewModel();
+    void setViewModel();
 
 protected:
     /// Resize event override includes floating button movement.
