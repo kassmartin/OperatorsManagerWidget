@@ -43,8 +43,7 @@ HEADERS += \
     OperatorsTreeModel/TreeNode.hpp
 
 FORMS += \
-    OperatorEditDialog.ui \
-    OperatorsManagerWidget.ui
+    OperatorEditDialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

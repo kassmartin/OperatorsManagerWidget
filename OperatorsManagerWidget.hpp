@@ -1,6 +1,6 @@
 #pragma once
 
-#include <QWidget>
+#include <QTreeView>
 
 #include "DBManager.hpp"
 #include "OperatorEditDialog.hpp"
@@ -11,7 +11,7 @@ QT_END_NAMESPACE
 
 class QPushButton;
 
-class OperatorsManagerWidget : public QWidget
+class OperatorsManagerWidget : public QTreeView
 {
     Q_OBJECT
 
@@ -22,7 +22,6 @@ public:
      * Includes creating of floating button for adding operators.
      */
     OperatorsManagerWidget(QWidget *parent = nullptr);
-    ~OperatorsManagerWidget();
 
 private slots:
     /*!
@@ -49,7 +48,6 @@ protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private:
-    Ui::OperatorsManagerWidget *ui;
     DBManager pDBManager;
     QPushButton *pAddButton;
     OperatorEditDialog *pOperatorEditDialog;

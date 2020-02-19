@@ -9,21 +9,16 @@
 #include "OperatorsTreeModel/LabelViewDelegate.hpp"
 
 OperatorsManagerWidget::OperatorsManagerWidget(QWidget *parent)
-    : QWidget(parent), ui(new Ui::OperatorsManagerWidget), pDBManager("system.db", this),
+    : QTreeView(parent), pDBManager("system.db", this),
       pAddButton(nullptr), pOperatorEditDialog(new OperatorEditDialog(&pDBManager, this))
 {
-    ui->setupUi(this);
     // OperatorEditDialog connections
     connect(pOperatorEditDialog, &OperatorEditDialog::saveOperator,
             this, &OperatorsManagerWidget::saveOperator);
 
     initFloatingAddOperatorButton();
     setViewModel();
-}
-
-OperatorsManagerWidget::~OperatorsManagerWidget()
-{
-    delete ui;
+    setHeaderHidden(true);
 }
 
 void OperatorsManagerWidget::onTreeItemDoubleClicked(const QModelIndex &index)
@@ -39,10 +34,10 @@ void OperatorsManagerWidget::onTreeItemDoubleClicked(const QModelIndex &index)
 
 void OperatorsManagerWidget::saveOperator(const OperatorData &data)
 {
-    auto model = qobject_cast<OperatorsTreeModel*>(ui->operatorsTreeView->model());
-    if (model != nullptr) {
-        model->setOperator(data);
-        ui->operatorsTreeView->update(); // TODO: Fix update
+    auto operatorsModel = qobject_cast<OperatorsTreeModel*>(model());
+    if (operatorsModel != nullptr) {
+        operatorsModel->setOperator(data);
+        update(); // TODO: Fix update
     }
     pDBManager.setOperator(data);
 }
@@ -53,7 +48,7 @@ void OperatorsManagerWidget::initFloatingAddOperatorButton()
     const QString iconPath(":/ui/icons/plus.svg");
 
     if (pAddButton == nullptr) {
-        pAddButton = new QPushButton(ui->operatorsTreeView);
+        pAddButton = new QPushButton(this);
     }
     pAddButton->setFlat(true);
     pAddButton->setIcon(QIcon(iconPath));
@@ -66,22 +61,21 @@ void OperatorsManagerWidget::initFloatingAddOperatorButton()
 
 void OperatorsManagerWidget::setViewModel()
 {
-    auto model = new OperatorsTreeModel(pDBManager.getOperatorsList(), ui->operatorsTreeView);
+    auto model = new OperatorsTreeModel(pDBManager.getOperatorsList(), this);
 
-    ui->operatorsTreeView->setItemDelegate(new LabelViewDelegate(ui->operatorsTreeView));
-    ui->operatorsTreeView->setModel(model);
+    setItemDelegate(new LabelViewDelegate(this));
+    setModel(model);
 
-    connect(ui->operatorsTreeView, &QTreeView::doubleClicked,
+    connect(this, &QTreeView::doubleClicked,
             this, &OperatorsManagerWidget::onTreeItemDoubleClicked);
 }
 
 void OperatorsManagerWidget::resizeEvent(QResizeEvent *event)
 {
     const int buttonWidgetSizeOffset = 16;
-    const QSize windowSize = ui->operatorsTreeView->size();
 
-    pAddButton->move(windowSize.width() - (pAddButton->width() + buttonWidgetSizeOffset),
-                     windowSize.height() - (pAddButton->height() + buttonWidgetSizeOffset));
+    pAddButton->move(size().width() - (pAddButton->width() + buttonWidgetSizeOffset),
+                     size().height() - (pAddButton->height() + buttonWidgetSizeOffset));
 
     QWidget::resizeEvent(event);
 }
