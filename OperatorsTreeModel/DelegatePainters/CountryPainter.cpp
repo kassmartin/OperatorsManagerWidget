@@ -7,7 +7,10 @@
 void CountryPainter::paint(QPainter *painter, const QStyleOptionViewItem &option,
                            const TreeNode* node) const
 {
-    QPixmap icon(pIconPathTemplate.arg(node->data(1)));
+    auto countryData = dynamic_cast<CountryData*>(node->dataPtr());
+    if (countryData == nullptr) { return; }
+
+    QPixmap icon(pIconPathTemplate.arg(countryData->code));
     QRect textRect = QApplication::style()->subElementRect(QStyle::SE_ItemViewItemText, &option);
     QRect iconRect = textRect;
 
@@ -21,5 +24,5 @@ void CountryPainter::paint(QPainter *painter, const QStyleOptionViewItem &option
 
     painter->drawPixmap(iconRect, icon);
 
-    painter->drawText(textRect, option.displayAlignment, node->data(0));
+    painter->drawText(textRect, option.displayAlignment, countryData->name);
 }

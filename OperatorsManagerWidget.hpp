@@ -3,6 +3,7 @@
 #include <QWidget>
 
 #include "DBManager.hpp"
+#include "OperatorEditDialog.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class OperatorsManagerWidget; }
@@ -24,22 +25,33 @@ public:
     ~OperatorsManagerWidget();
 
 private slots:
-    /// Creates operator adding dialog.
-    void onAddOperatorButtonClicked();
+    /*!
+     * \param[in] index Index of double clicked item.
+     *
+     * Calls OperatorEditDialog instance with item from index.
+     */
+    void onTreeItemDoubleClicked(const QModelIndex &index);
+    /*!
+     * \param[in] data New data object.
+     *
+     * Notifies model and database to update instance with new data.
+     */
+    void saveOperator(const OperatorData &data);
 
 private:
     /// Initializes floating button for operators adding.
-    void createFloatingAddOperatorButton();
-
+    void initFloatingAddOperatorButton();
+    /// Initializes model and delegate for ui tree view.
     void setViewModel();
 
 protected:
-    /// Resize event override includes floating button movement.
+    /// Resize event override includes floating button positioning.
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private:
     Ui::OperatorsManagerWidget *ui;
-    QPushButton *pAddButtonPtr;
     DBManager pDBManager;
+    QPushButton *pAddButton;
+    OperatorEditDialog *pOperatorEditDialog;
 
 };

@@ -1,0 +1,5 @@
+#pragma once
+
+#include "AbstractPainter.hpp"
+#include "CountryPainter.hpp"
+#include "OperatorPainter.hpp"

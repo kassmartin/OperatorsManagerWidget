@@ -32,8 +32,13 @@ HEADERS += \
     DBManager.hpp \
     OperatorsTreeModel/DelegatePainters/AbstractPainter.hpp \
     OperatorsTreeModel/DelegatePainters/CountryPainter.hpp \
+    OperatorsTreeModel/DelegatePainters/DelegatePainters \
     OperatorsTreeModel/DelegatePainters/OperatorPainter.hpp \
     OperatorsTreeModel/LabelViewDelegate.hpp \
+    OperatorsTreeModel/NodeDatas/AbstractData.hpp \
+    OperatorsTreeModel/NodeDatas/CountryData.hpp \
+    OperatorsTreeModel/NodeDatas/NodeDatas \
+    OperatorsTreeModel/NodeDatas/OperatorData.hpp \
     OperatorsTreeModel/OperatorsTreeModel.hpp \
     OperatorsTreeModel/TreeNode.hpp
 

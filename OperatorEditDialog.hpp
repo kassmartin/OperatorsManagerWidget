@@ -6,43 +6,43 @@ namespace Ui {
 class OperatorEditDialog;
 }
 
-struct OperatorData
-{
-    QString name;
-    unsigned mcc;
-    unsigned mnc;
-};
+struct OperatorData;
+class DBManager;
 
 class OperatorEditDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    /// Default init for new operator adding.
-    OperatorEditDialog(QWidget *parent = nullptr);
-
     /*!
-     * \param[in] data Operator information.
-     *
-     * Constructor for operator editting.
+     * \param database Database pointer for future icons operations.
+     * \param parent Parent widget.
      */
-    OperatorEditDialog(const OperatorData &data, QWidget *parent = nullptr);
-
+    OperatorEditDialog(DBManager *database = nullptr, QWidget *parent = nullptr);
     ~OperatorEditDialog();
+
+public slots:
+    /// Default view for new operator creation.
+    void show();
+    /// View for operator editing.
+    void show(OperatorData *data);
 
 signals:
     /// Emits when "Save" button clicked.
-    void saveOperator(const OperatorData data);
+    void saveOperator(const OperatorData &data);
 
 private:
-    /// Sets connections for ui.
-    void init();
+    /// Override consists inputs clearing. Calls QDialog::closeEvent.
+    void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
-    /// Searches and sets dialog and country icons.
-    void searchAndSetIcons();
+    /// Searches and sets icons.
+    void manageIcons();
+    /// Generates new data package and emits saveOperator signal.
+    void onSaveButtonClicked();
 
 private:
     Ui::OperatorEditDialog *ui;
+    DBManager *pDatabase;
 };
 

@@ -1,7 +1,7 @@
 #include "TreeNode.hpp"
 
-TreeNode::TreeNode(NodeType type, const QList<QVariant> &data, TreeNode *parent)
-    : pNodeData(std::move(data)), pParentNode(parent), pType(type)
+TreeNode::TreeNode(NodeType type, AbstractData *data, TreeNode *parent)
+    : pNodeData(data), pParentNode(parent), pType(type)
 {}
 
 TreeNode::~TreeNode()
@@ -29,38 +29,17 @@ int TreeNode::childCount() const
 
 int TreeNode::columnCount() const
 {
-    return pNodeData.count();
+    return 1;
 }
 
 QString TreeNode::data() const
 {
-    QStringList result;
-    for (auto element : pNodeData) {
-        switch (element.type()) {
-        case QVariant::Int:
-            result << QString::number(element.toInt());
-            break;
-        case QVariant::String:
-            result << element.toString();
-            break;
-        default:
-            break;
-        }
-    }
-    return result.join(" ");
+    return pNodeData->name;
 }
 
-QString TreeNode::data(int number) const
+AbstractData *TreeNode::dataPtr() const
 {
-    QVariant element = pNodeData.at(number);
-    switch (element.type()) {
-    case QVariant::Int:
-        return QString::number(element.toInt());
-    case QVariant::String:
-        return element.toString();
-    default:
-        return {};
-    }
+    return pNodeData.get();
 }
 
 TreeNode *TreeNode::parentNode()

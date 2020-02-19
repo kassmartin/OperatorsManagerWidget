@@ -1,9 +1,29 @@
 #include "OperatorsTreeModel.hpp"
 
-OperatorsTreeModel::OperatorsTreeModel(const DBManager &database, QObject *parent)
+OperatorsTreeModel::OperatorsTreeModel(const DatabaseData &data, QObject *parent)
     : QAbstractItemModel(parent), pRootItem(new TreeNode)
 {
-    modelFromDatabase(database);
+    modelFromDatabase(data);
+}
+
+void OperatorsTreeModel::setOperator(const OperatorData &data)
+{
+    for (int i = 0, count = pRootItem->childCount(); i < count; ++i) {
+        auto countryNode = pRootItem->child(i);
+        if (countryNode->dataPtr()->mcc == data.mcc) {
+            for (int j = 0, operatorsCount = countryNode->childCount(); j < operatorsCount; ++j) {
+                auto operatorNode = countryNode->child(j);
+                auto operatorData = dynamic_cast<OperatorData*>(operatorNode->dataPtr());
+                if (operatorData->mnc == data.mnc) {
+                    operatorData->name = data.name;
+                    return;
+                }
+            }
+            countryNode->appendChild(new TreeNode(TreeNode::Operator,
+                                                  new OperatorData(data),
+                                                  countryNode));
+        }
+    }
 }
 
 QModelIndex OperatorsTreeModel::index(int row, int column, const QModelIndex &parent) const
@@ -71,28 +91,31 @@ QVariant OperatorsTreeModel::data(const QModelIndex &index, int role) const
     return item->data();
 }
 
-void OperatorsTreeModel::modelFromDatabase(const DBManager &database)
+void OperatorsTreeModel::modelFromDatabase(const DatabaseData &data)
 {
-    QSqlQuery query = database.getOperatorsList();
+    auto[query, dbKeys] = data;
     TreeNode *currentCountry = nullptr;
 
     while (query.next()) {
-        QString country = query.value(0).toString();
-        if (currentCountry == nullptr ||
-            country != currentCountry->data(0)) {
-            currentCountry = new TreeNode(TreeNode::Country, {
+        QString country = query.value(dbKeys["country"]).toString();
+        if (currentCountry == nullptr ||                // Firstly checks nullptr - no falls expected
+            country != currentCountry->data())
+        {
+            auto countryData = new CountryData(
                 country,
-                query.value(2).toString(),
-                query.value(1).toInt()
-            }, pRootItem.get());
+                query.value(dbKeys["mcc"]).toInt(),
+                query.value(dbKeys["code"]).toString()
+            );
+            currentCountry = new TreeNode(TreeNode::Country, countryData, pRootItem.get());
             pRootItem->appendChild(currentCountry);
         }
-        auto newOperator = new TreeNode(TreeNode::Operator, {
-            query.value(5).toString(),
-            query.value(1).toInt(),
-            query.value(4).toInt(),
-            query.value(3).toInt()
-        }, currentCountry);
+
+        auto operatorData = new OperatorData(
+            query.value(dbKeys["name"]).toString(),
+            query.value(dbKeys["mcc"]).toInt(),
+            query.value(dbKeys["mnc"]).toInt()
+        );
+        auto newOperator = new TreeNode(TreeNode::Operator, operatorData, currentCountry);
         currentCountry->appendChild(newOperator);
     }
 }

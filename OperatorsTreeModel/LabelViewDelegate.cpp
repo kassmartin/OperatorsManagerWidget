@@ -5,8 +5,7 @@
 
 #include "LabelViewDelegate.hpp"
 #include "TreeNode.hpp"
-#include "DelegatePainters/CountryPainter.hpp"
-#include "DelegatePainters/OperatorPainter.hpp"
+#include "DelegatePainters/DelegatePainters"
 
 LabelViewDelegate::LabelViewDelegate(QObject *parent)
     : QStyledItemDelegate(parent) {}
