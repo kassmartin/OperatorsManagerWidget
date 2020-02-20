@@ -93,17 +93,16 @@ void OperatorEditDialog::manageIcons()
             } else {
                 operatorIcon = QIcon(pDefaultIconPath);
             }
+            setWindowIcon(operatorIcon);
         }
     }
-
-    setWindowIcon(operatorIcon);
 }
 
 void OperatorEditDialog::onSaveButtonClicked()
 {
     emit saveOperator(OperatorData (
         ui->operatorNameInput->text(),
-        ui->mccInput->text().toUInt(),
-        ui->mncInput->text().toUInt()));
+        ui->mccInput->text().toInt(),
+        ui->mncInput->text().toInt()));
     close();
 }

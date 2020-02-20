@@ -1,10 +1,10 @@
 #include <QPushButton>
 #include <QResizeEvent>
+#include <QScrollBar>
 
 #include <QDebug>
 
 #include "OperatorsManagerWidget.hpp"
-#include "ui_OperatorsManagerWidget.h"
 #include "OperatorsTreeModel/OperatorsTreeModel.hpp"
 #include "OperatorsTreeModel/LabelViewDelegate.hpp"
 
@@ -107,7 +107,7 @@ void OperatorsManagerWidget::setViewModel()
 
 void OperatorsManagerWidget::resizeEvent(QResizeEvent *event)
 {
-    const int buttonWidgetSizeOffset = 16;
+    const int buttonWidgetSizeOffset = verticalScrollBar()->width() + 4;
 
     pAddButton->move(size().width() - (pAddButton->width() + buttonWidgetSizeOffset),
                      size().height() - (pAddButton->height() + buttonWidgetSizeOffset));
