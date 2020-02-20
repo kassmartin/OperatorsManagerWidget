@@ -5,7 +5,7 @@
 #include "../TreeNode.hpp"
 
 void CountryPainter::paint(QPainter *painter, const QStyleOptionViewItem &option,
-                           const TreeNode* node) const
+                           TreeNode* node) const
 {
     auto countryData = dynamic_cast<CountryData*>(node->dataPtr());
     if (countryData == nullptr) { return; }
@@ -13,8 +13,10 @@ void CountryPainter::paint(QPainter *painter, const QStyleOptionViewItem &option
     QPixmap icon(pIconPathTemplate.arg(countryData->code));
     QRect textRect = QApplication::style()->subElementRect(QStyle::SE_ItemViewItemText, &option);
     QRect iconRect = textRect;
+    QFontMetrics fontMetrics(painter->font());
 
     textRect.setX(textRect.x() + textRect.height() + pElementsOffset);
+    textRect.setWidth(fontMetrics.horizontalAdvance(countryData->name));
     iconRect.setWidth(iconRect.height());
 
     if (icon.isNull()) {
