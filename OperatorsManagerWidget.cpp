@@ -18,15 +18,38 @@ OperatorsManagerWidget::OperatorsManagerWidget(QWidget *parent)
 
     initFloatingAddOperatorButton();
     setViewModel();
+
     setHeaderHidden(true);
+    setAttribute(Qt::WA_MouseTracking, true);
+}
+
+void OperatorsManagerWidget::emptySlot(int mcc, int mnc)
+{
+    qDebug() << "Empty slot with mcc: " << mcc << ", mnc: " << mnc;
+}
+
+void OperatorsManagerWidget::onItemClicked(const QModelIndex &index)
+{
+    auto node = static_cast<TreeNode*>(index.internalPointer());
+    if (node != nullptr && node->type() == TreeNode::Operator) {    // Firstly checks nullptr
+        QSize elementSize = node->getSize();
+        int buttonWidth = elementSize.height();
+        int minButtonPos = elementSize.width() - buttonWidth;
+        int mousePointerXPos = mapFromGlobal(QCursor::pos()).x();
+
+        if (mousePointerXPos >= minButtonPos &&
+            mousePointerXPos <= elementSize.width())
+        {
+            auto data = dynamic_cast<OperatorData*>(node->dataPtr());
+            if (data != nullptr) { emptySlot(data->mcc, data->mnc); }
+        }
+    }
 }
 
 void OperatorsManagerWidget::onItemDoubleClicked(const QModelIndex &index)
 {
     auto node = static_cast<TreeNode*>(index.internalPointer());
-    if (node == nullptr) { return; }
-
-    if (node->type() == TreeNode::Operator) {
+    if (node != nullptr && node->type() == TreeNode::Operator) {    // Firstly checks nullptr
         auto data = dynamic_cast<OperatorData*>(node->dataPtr());
         if (data != nullptr) {
             pOperatorEditDialog->show(data);
@@ -80,5 +103,5 @@ void OperatorsManagerWidget::resizeEvent(QResizeEvent *event)
     pAddButton->move(size().width() - (pAddButton->width() + buttonWidgetSizeOffset),
                      size().height() - (pAddButton->height() + buttonWidgetSizeOffset));
 
-    QWidget::resizeEvent(event);
+    QTreeView::resizeEvent(event);
 }

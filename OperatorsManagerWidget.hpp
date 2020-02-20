@@ -24,6 +24,12 @@ public:
     OperatorsManagerWidget(QWidget *parent = nullptr);
 
 private slots:
+    void emptySlot(int mcc, int mnc);
+    /*!
+     * \brief onItemClicked
+     * \param index
+     */
+    void onItemClicked(const QModelIndex &index);
     /*!
      * \param[in] index Index of double clicked item.
      *

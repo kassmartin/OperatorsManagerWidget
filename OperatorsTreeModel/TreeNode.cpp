@@ -1,7 +1,7 @@
 #include "TreeNode.hpp"
 
 TreeNode::TreeNode(NodeType type, AbstractData *data, TreeNode *parent)
-    : pNodeData(data), pParentNode(parent), pType(type)
+    : pNodeData(data), pParentNode(parent), pType(type), pNodeViewSize(0, 0)
 {}
 
 TreeNode::~TreeNode()
@@ -12,6 +12,16 @@ TreeNode::~TreeNode()
 void TreeNode::appendChild(TreeNode *child)
 {
     pChildItems.append(child);
+}
+
+void TreeNode::setSize(const QSize &size)
+{
+    pNodeViewSize = size;
+}
+
+QSize TreeNode::getSize() const
+{
+    return pNodeViewSize;
 }
 
 TreeNode *TreeNode::child(int row)

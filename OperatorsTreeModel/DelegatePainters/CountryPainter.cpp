@@ -14,10 +14,15 @@ void CountryPainter::paint(QPainter *painter, const QStyleOptionViewItem &option
     QRect textRect = QApplication::style()->subElementRect(QStyle::SE_ItemViewItemText, &option);
     QRect iconRect = textRect;
     QFontMetrics fontMetrics(painter->font());
+    QSize nodeViewSize;
 
-    textRect.setX(textRect.x() + textRect.height() + pElementsOffset);
-    textRect.setWidth(fontMetrics.horizontalAdvance(countryData->name));
     iconRect.setWidth(iconRect.height());
+    textRect.setX(textRect.x() + iconRect.width() + pElementsOffset);
+    textRect.setWidth(fontMetrics.horizontalAdvance(countryData->name));
+
+    nodeViewSize.setWidth(iconRect.width() + pElementsOffset + textRect.width());
+    nodeViewSize.setHeight(textRect.height());
+    node->setSize(nodeViewSize);
 
     if (icon.isNull()) {
         icon = QPixmap(":/ui/icons/question.svg");

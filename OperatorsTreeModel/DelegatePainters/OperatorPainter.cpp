@@ -18,19 +18,24 @@ void OperatorPainter::paint(QPainter *painter, const QStyleOptionViewItem &optio
     QRect textRect = QApplication::style()->subElementRect(QStyle::SE_ItemViewItemText, &option);
     QRect iconRect = textRect;
     QFontMetrics fontMetrics(painter->font());
+    QSize nodeViewSize;
 
-    textRect.setX(textRect.x() + textRect.height() + pElementsOffset);
-    textRect.setWidth(fontMetrics.horizontalAdvance(labelText));
     iconRect.setWidth(iconRect.height());
+    textRect.setX(textRect.x() + iconRect.width() + pElementsOffset);
+    textRect.setWidth(fontMetrics.horizontalAdvance(labelText));
 
-    if (option.state & QStyle::State_Selected ||
-        option.state & QStyle::State_MouseOver) {
+    nodeViewSize.setWidth(textRect.x() + textRect.width());
+    nodeViewSize.setHeight(textRect.height());
+
+    if (option.state & QStyle::State_MouseOver) {
         QPixmap plusIcon(":/ui/icons/plus.svg");
         QRect plusIconRect = iconRect;
         plusIcon = plusIcon.scaled(iconRect.width(), iconRect.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
         plusIconRect.setX(textRect.x() + textRect.width() + pElementsOffset);
         painter->drawPixmap(plusIconRect, plusIcon);
+        nodeViewSize.setWidth(plusIconRect.x() + plusIcon.width());
     }
+    node->setSize(nodeViewSize);
 
     if (icon.isNull()) {
         icon = QPixmap(":/ui/icons/question.svg");

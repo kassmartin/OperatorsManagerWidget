@@ -2,6 +2,7 @@
 
 #include <QVariant>
 #include <QList>
+#include <QSize>
 
 #include <memory>
 
@@ -21,6 +22,8 @@ public:
     ~TreeNode();
 
     void appendChild(TreeNode *child);
+    void setSize(const QSize &size);
+    QSize getSize() const;
 
     TreeNode* child(int row);
     int childCount() const;
@@ -36,4 +39,5 @@ private:
     std::unique_ptr<AbstractData> pNodeData;
     TreeNode* pParentNode;
     NodeType pType;
+    QSize pNodeViewSize;
 };

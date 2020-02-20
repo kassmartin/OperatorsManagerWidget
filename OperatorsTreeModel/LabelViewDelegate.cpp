@@ -32,3 +32,16 @@ void LabelViewDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
         QStyledItemDelegate::paint(painter, option, index);
     }
 }
+
+
+QSize LabelViewDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    auto element = static_cast<TreeNode*>(index.internalPointer());
+    if (element != nullptr) {
+        QSize elementSize = element->getSize();
+        if (!elementSize.isEmpty()) {
+            return elementSize;
+        }
+    }
+    return QStyledItemDelegate::sizeHint(option, index);
+}
