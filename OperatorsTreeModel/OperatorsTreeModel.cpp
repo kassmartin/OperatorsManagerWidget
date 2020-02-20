@@ -3,7 +3,7 @@
 OperatorsTreeModel::OperatorsTreeModel(const DatabaseData &data, QObject *parent)
     : QAbstractItemModel(parent), pRootItem(new TreeNode)
 {
-    modelFromDatabase(data);
+    modelFromDatabaseData(data);
 }
 
 void OperatorsTreeModel::setOperator(const OperatorData &data)
@@ -94,7 +94,7 @@ QVariant OperatorsTreeModel::data(const QModelIndex &index, int role) const
     return item->data();
 }
 
-void OperatorsTreeModel::modelFromDatabase(const DatabaseData &data)
+void OperatorsTreeModel::modelFromDatabaseData(const DatabaseData &data)
 {
     auto[query, dbKeys] = data;
     TreeNode *currentCountry = nullptr;

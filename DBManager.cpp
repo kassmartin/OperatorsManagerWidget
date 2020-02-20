@@ -33,13 +33,13 @@ QPair<QSqlQuery, QMap<QString, unsigned>> DBManager::getOperatorsList() const
     return { QSqlQuery (queryString, pConnection), databaseKeys };
 }
 
-QString DBManager::getCountryCode(const QString &mcc) const
+QString DBManager::getCountryCode(int mcc) const
 {
     const QString queryStringTemplate(
         "select countries.code "
         "from countries "
         "where countries.mcc == '%1'");
-    QSqlQuery query(queryStringTemplate.arg(mcc), pConnection);
+    QSqlQuery query(queryStringTemplate.arg(QString::number(mcc)), pConnection);
 
     if (query.next()) {
         return query.value(0).toString();

@@ -6,11 +6,11 @@
 #include "OperatorsTreeModel/NodeDatas/OperatorData.hpp"
 #include "DBManager.hpp"
 
-OperatorEditDialog::OperatorEditDialog(DBManager *database, QWidget *parent)
-    : QDialog(parent), ui(new Ui::OperatorEditDialog), pDatabase(database)
+OperatorEditDialog::OperatorEditDialog(QWidget *parent)
+    : QDialog(parent), ui(new Ui::OperatorEditDialog)
 {
     ui->setupUi(this);
-    manageIcons();
+
     // Buttons connections
     connect(ui->saveButton, &QPushButton::clicked,
             this, &OperatorEditDialog::onSaveButtonClicked);
@@ -30,8 +30,15 @@ OperatorEditDialog::~OperatorEditDialog()
 
 void OperatorEditDialog::show()
 {
+    int countryIconSize = ui->countryIconLabel->height();
+
+    setWindowIcon(QIcon(pDefaultIconPath));
+    ui->countryIconLabel->setPixmap(
+        QPixmap(pDefaultIconPath).scaled(countryIconSize, countryIconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+
     ui->mccInput->setReadOnly(false);
     ui->mncInput->setReadOnly(false);
+
     this->exec();
 }
 
@@ -45,6 +52,21 @@ void OperatorEditDialog::show(OperatorData *data)
     this->exec();
 }
 
+void OperatorEditDialog::setCountryIconPath(const QString &path)
+{
+    const int countryIconSize = ui->countryIconLabel->height();
+    QPixmap countryIcon;
+
+    if (QFileInfo::exists(path)) {
+        countryIcon = QPixmap(path);
+    } else {
+        countryIcon = QPixmap(pDefaultIconPath);
+    }
+
+    countryIcon = countryIcon.scaled(countryIconSize, countryIconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    ui->countryIconLabel->setPixmap(countryIcon);
+}
+
 void OperatorEditDialog::closeEvent(QCloseEvent *event)
 {
     ui->operatorNameInput->clear();
@@ -56,34 +78,25 @@ void OperatorEditDialog::closeEvent(QCloseEvent *event)
 
 void OperatorEditDialog::manageIcons()
 {
-    const QString countryIconsPathTemplate = "Icons/Countries/%1.png";
     const QString operatorIconsPathTemplate = "Icons/Operators/%1_%2.png";
-    const QString defaultIconPath = ":/ui/icons/question.svg";
-    const int countryIconSize = ui->countryIconLabel->height();
-    QString countryIconPath = defaultIconPath;
-    QString operatorIconPath = defaultIconPath;
+    QIcon operatorIcon;
 
     QString mcc = ui->mccInput->text();
     QString mnc = ui->mncInput->text();
     if (!mcc.isEmpty()) {
-        QString countryCode = pDatabase->getCountryCode(mcc);
-        if (!countryCode.isEmpty()) {
-            countryIconPath = countryIconsPathTemplate.arg(countryCode);
-        }
+        emit requestCountryIconPath(mcc.toInt());
 
         if (!mnc.isEmpty()) {
             QString tempIconPath = operatorIconsPathTemplate.arg(mcc, mnc);
             if (QFileInfo::exists(tempIconPath)) {
-                operatorIconPath = tempIconPath;
+                operatorIcon = QIcon(tempIconPath);
+            } else {
+                operatorIcon = QIcon(pDefaultIconPath);
             }
         }
     }
 
-    QPixmap countryIcon(countryIconPath);
-    countryIcon = countryIcon.scaled(countryIconSize, countryIconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    ui->countryIconLabel->setPixmap(countryIcon);
-
-    setWindowIcon(QIcon(operatorIconPath));
+    setWindowIcon(operatorIcon);
 }
 
 void OperatorEditDialog::onSaveButtonClicked()

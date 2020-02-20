@@ -21,6 +21,8 @@ public:
 
     /*!
      * Executes "select" query and constructs database keys.
+     * QSqlQuery result sorted by country name.
+     *
      * \return Pair of QSqlQuery and Keys Map.
      * QSqlQuery object - return table from database.
      * Map contains human-readable keys in assosiations with numeric columns positions in
@@ -31,7 +33,7 @@ public:
      * \param mcc Operator mcc for search.
      * \return Returns operator code string. If not exists - empty string returns.
      */
-    QString getCountryCode(const QString &mcc) const;
+    QString getCountryCode(int mcc) const;
     /*!
      * \param data New operator data object.
      *

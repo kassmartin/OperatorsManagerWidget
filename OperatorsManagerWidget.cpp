@@ -10,11 +10,13 @@
 
 OperatorsManagerWidget::OperatorsManagerWidget(QWidget *parent)
     : QTreeView(parent), pDBManager("system.db", this),
-      pAddButton(nullptr), pOperatorEditDialog(new OperatorEditDialog(&pDBManager, this))
+      pAddButton(nullptr), pOperatorEditDialog(new OperatorEditDialog(this))
 {
     // OperatorEditDialog connections
     connect(pOperatorEditDialog, &OperatorEditDialog::saveOperator,
             this, &OperatorsManagerWidget::saveOperator);
+    connect(pOperatorEditDialog, &OperatorEditDialog::requestCountryIconPath,
+            this, &OperatorsManagerWidget::onCountryIconRequest);
 
     initFloatingAddOperatorButton();
     setViewModel();
@@ -64,6 +66,13 @@ void OperatorsManagerWidget::saveOperator(const OperatorData &data)
         operatorsModel->setOperator(data);
     }
     pDBManager.setOperator(data);
+}
+
+void OperatorsManagerWidget::onCountryIconRequest(int mcc)
+{
+    const QString pathTemplate = "Icons/Countries/%1.png";
+    QString code = pDBManager.getCountryCode(mcc);
+    pOperatorEditDialog->setCountryIconPath(pathTemplate.arg(code));
 }
 
 void OperatorsManagerWidget::initFloatingAddOperatorButton()

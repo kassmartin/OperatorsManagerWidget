@@ -24,6 +24,7 @@ public:
     OperatorsManagerWidget(QWidget *parent = nullptr);
 
 private slots:
+    /// Just empty slot that write to debug console.
     void emptySlot(int mcc, int mnc);
     /*!
      * \brief onItemClicked
@@ -42,6 +43,12 @@ private slots:
      * Notifies model and database to update instance with new data.
      */
     void saveOperator(const OperatorData &data);
+    /*!
+     * \param mcc MCC of country for database search
+     *
+     * Searches and constructs icon path. Calls setIconPath method of OperatorEditDialog instance.
+     */
+    void onCountryIconRequest(int mcc);
 
 private:
     /// Initializes floating button for operators adding.
