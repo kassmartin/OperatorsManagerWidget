@@ -29,7 +29,7 @@ private slots:
      *
      * Calls OperatorEditDialog instance with item from index.
      */
-    void onTreeItemDoubleClicked(const QModelIndex &index);
+    void onItemDoubleClicked(const QModelIndex &index);
     /*!
      * \param[in] data New data object.
      *
@@ -51,5 +51,4 @@ private:
     DBManager pDBManager;
     QPushButton *pAddButton;
     OperatorEditDialog *pOperatorEditDialog;
-
 };

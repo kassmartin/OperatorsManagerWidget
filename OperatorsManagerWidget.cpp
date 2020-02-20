@@ -21,9 +21,11 @@ OperatorsManagerWidget::OperatorsManagerWidget(QWidget *parent)
     setHeaderHidden(true);
 }
 
-void OperatorsManagerWidget::onTreeItemDoubleClicked(const QModelIndex &index)
+void OperatorsManagerWidget::onItemDoubleClicked(const QModelIndex &index)
 {
     auto node = static_cast<TreeNode*>(index.internalPointer());
+    if (node == nullptr) { return; }
+
     if (node->type() == TreeNode::Operator) {
         auto data = dynamic_cast<OperatorData*>(node->dataPtr());
         if (data != nullptr) {
@@ -37,7 +39,6 @@ void OperatorsManagerWidget::saveOperator(const OperatorData &data)
     auto operatorsModel = qobject_cast<OperatorsTreeModel*>(model());
     if (operatorsModel != nullptr) {
         operatorsModel->setOperator(data);
-        update(); // TODO: Fix update
     }
     pDBManager.setOperator(data);
 }
@@ -66,8 +67,10 @@ void OperatorsManagerWidget::setViewModel()
     setItemDelegate(new LabelViewDelegate(this));
     setModel(model);
 
+    connect(this, &QTreeView::clicked,
+            this, &OperatorsManagerWidget::onItemClicked);
     connect(this, &QTreeView::doubleClicked,
-            this, &OperatorsManagerWidget::onTreeItemDoubleClicked);
+            this, &OperatorsManagerWidget::onItemDoubleClicked);
 }
 
 void OperatorsManagerWidget::resizeEvent(QResizeEvent *event)
