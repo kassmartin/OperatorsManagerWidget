@@ -8,6 +8,7 @@ OperatorsTreeModel::OperatorsTreeModel(const DatabaseData &data, QObject *parent
 
 void OperatorsTreeModel::setOperator(const OperatorData &data)
 {
+    emit layoutAboutToBeChanged();
     for (int i = 0, count = pRootItem->childCount(); i < count; ++i) {
         auto countryNode = pRootItem->child(i);
         if (countryNode->dataPtr()->mcc == data.mcc) {
@@ -16,12 +17,14 @@ void OperatorsTreeModel::setOperator(const OperatorData &data)
                 auto operatorData = dynamic_cast<OperatorData*>(operatorNode->dataPtr());
                 if (operatorData->mnc == data.mnc) {
                     operatorData->name = data.name;
+                    emit layoutChanged();
                     return;
                 }
             }
             countryNode->appendChild(new TreeNode(TreeNode::Operator,
                                                   new OperatorData(data),
                                                   countryNode));
+            emit layoutChanged();
         }
     }
 }
