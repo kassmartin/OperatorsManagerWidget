@@ -31,13 +31,13 @@ public slots:
      */
     void show(OperatorData *data);
     /// Accepts country icon path. Check if it exists. Sets to default icon if false.
-    void setCountryIconPath(const QString &path);
+    void setCountryIcon(const QPixmap &icon);
 
 signals:
     /// Emits when "Save" button clicked.
     void saveOperator(const OperatorData &data);
     /// Signal to parent widget for icon search.
-    void requestCountryIconPath(int mcc);
+    void requestCountryIconPath(int mcc, int iconSize);
 
 private:
     /// Override consists inputs clearing. Calls QDialog::closeEvent.
@@ -50,7 +50,6 @@ private slots:
     void onSaveButtonClicked();
 
 private:
-    const QString pDefaultIconPath = ":/ui/icons/question.svg";
     Ui::OperatorEditDialog *ui;
 
 };

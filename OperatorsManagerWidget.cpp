@@ -7,6 +7,7 @@
 #include "OperatorsManagerWidget.hpp"
 #include "OperatorsTreeModel/OperatorsTreeModel.hpp"
 #include "OperatorsTreeModel/LabelViewDelegate.hpp"
+#include "IconDealer.hpp"
 
 OperatorsManagerWidget::OperatorsManagerWidget(QWidget *parent)
     : QTreeView(parent), pDBManager("system.db", this),
@@ -68,23 +69,21 @@ void OperatorsManagerWidget::saveOperator(const OperatorData &data)
     pDBManager.setOperator(data);
 }
 
-void OperatorsManagerWidget::onCountryIconRequest(int mcc)
+void OperatorsManagerWidget::onCountryIconRequest(int mcc, int iconSize)
 {
-    const QString pathTemplate = "Icons/Countries/%1.png";
     QString code = pDBManager.getCountryCode(mcc);
-    pOperatorEditDialog->setCountryIconPath(pathTemplate.arg(code));
+    pOperatorEditDialog->setCountryIcon(IconDealer::getCountryIcon(code, iconSize));
 }
 
 void OperatorsManagerWidget::initFloatingAddOperatorButton()
 {
     const QSize buttonSize(36, 36);
-    const QString iconPath(":/ui/icons/plus.svg");
 
     if (pAddButton == nullptr) {
         pAddButton = new QPushButton(this);
     }
     pAddButton->setFlat(true);
-    pAddButton->setIcon(QIcon(iconPath));
+    pAddButton->setIcon(QIcon(IconDealer::getPlusIcon(buttonSize.width())));
     pAddButton->setIconSize(buttonSize);
     pAddButton->resize(buttonSize);
 

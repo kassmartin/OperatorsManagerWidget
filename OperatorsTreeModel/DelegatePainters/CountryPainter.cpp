@@ -3,6 +3,7 @@
 
 #include "CountryPainter.hpp"
 #include "../TreeNode.hpp"
+#include "IconDealer.hpp"
 
 void CountryPainter::paint(QPainter *painter, const QStyleOptionViewItem &option,
                            TreeNode* node) const
@@ -10,7 +11,7 @@ void CountryPainter::paint(QPainter *painter, const QStyleOptionViewItem &option
     auto countryData = dynamic_cast<CountryData*>(node->dataPtr());
     if (countryData == nullptr) { return; }
 
-    QPixmap icon(pIconPathTemplate.arg(countryData->code));
+    QPixmap icon(node->getIcon());
     QRect textRect = QApplication::style()->subElementRect(QStyle::SE_ItemViewItemText, &option);
     QRect iconRect = textRect;
     QFontMetrics fontMetrics(painter->font());
@@ -25,7 +26,7 @@ void CountryPainter::paint(QPainter *painter, const QStyleOptionViewItem &option
     node->setSize(nodeViewSize);
 
     if (icon.isNull()) {
-        icon = QPixmap(":/ui/icons/question.svg");
+        icon = IconDealer::getDefaultUnknownIcon();
     }
     icon = icon.scaled(iconRect.width(), iconRect.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 

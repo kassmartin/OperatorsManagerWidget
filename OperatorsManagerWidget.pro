@@ -27,6 +27,7 @@ SOURCES += \
     DBManager.cpp
 
 HEADERS += \
+    IconDealer.hpp \
     OperatorEditDialog.hpp \
     OperatorsManagerWidget.hpp \
     DBManager.hpp \

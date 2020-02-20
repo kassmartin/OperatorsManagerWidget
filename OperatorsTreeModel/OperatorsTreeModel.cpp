@@ -1,4 +1,5 @@
 #include "OperatorsTreeModel.hpp"
+#include "IconDealer.hpp"
 
 OperatorsTreeModel::OperatorsTreeModel(const DatabaseData &data, QObject *parent)
     : QAbstractItemModel(parent), pRootItem(new TreeNode)
@@ -21,9 +22,12 @@ void OperatorsTreeModel::setOperator(const OperatorData &data)
                     return;
                 }
             }
-            countryNode->appendChild(new TreeNode(TreeNode::Operator,
-                                                  new OperatorData(data),
-                                                  countryNode));
+            auto newOperator = new TreeNode(TreeNode::Operator,
+                                            new OperatorData(data),
+                                            countryNode);
+            newOperator->setIcon(IconDealer::getOperatorIcon(data.mcc, data.mnc));
+            countryNode->appendChild(newOperator);
+
             emit layoutChanged();
         }
     }
@@ -110,6 +114,7 @@ void OperatorsTreeModel::modelFromDatabaseData(const DatabaseData &data)
                 query.value(dbKeys["code"]).toString()
             );
             currentCountry = new TreeNode(TreeNode::Country, countryData, pRootItem.get());
+            currentCountry->setIcon(IconDealer::getCountryIcon(countryData->code));
             pRootItem->appendChild(currentCountry);
         }
 
@@ -119,6 +124,7 @@ void OperatorsTreeModel::modelFromDatabaseData(const DatabaseData &data)
             query.value(dbKeys["mnc"]).toInt()
         );
         auto newOperator = new TreeNode(TreeNode::Operator, operatorData, currentCountry);
+        newOperator->setIcon(IconDealer::getOperatorIcon(operatorData->mcc, operatorData->mnc));
         currentCountry->appendChild(newOperator);
     }
 }

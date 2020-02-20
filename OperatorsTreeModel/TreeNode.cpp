@@ -24,6 +24,16 @@ QSize TreeNode::getSize() const
     return pNodeViewSize;
 }
 
+void TreeNode::setIcon(const QPixmap &icon)
+{
+    pIcon = icon;
+}
+
+QPixmap TreeNode::getIcon() const
+{
+    return pIcon;
+}
+
 TreeNode *TreeNode::child(int row)
 {
     if (row < 0 || row >= pChildItems.size()) {

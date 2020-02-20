@@ -48,7 +48,7 @@ private slots:
      *
      * Searches and constructs icon path. Calls setIconPath method of OperatorEditDialog instance.
      */
-    void onCountryIconRequest(int mcc);
+    void onCountryIconRequest(int mcc, int iconSize);
 
 private:
     /// Initializes floating button for operators adding.

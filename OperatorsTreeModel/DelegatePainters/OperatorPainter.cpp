@@ -3,6 +3,7 @@
 
 #include "OperatorPainter.hpp"
 #include "../TreeNode.hpp"
+#include "IconDealer.hpp"
 
 void OperatorPainter::paint(QPainter *painter, const QStyleOptionViewItem &option,
                             TreeNode *node) const
@@ -13,8 +14,7 @@ void OperatorPainter::paint(QPainter *painter, const QStyleOptionViewItem &optio
     QString labelText = pLabelTemplate.arg(operatorData->name,
                                            QString::number(operatorData->mcc),
                                            QString::number(operatorData->mnc));
-    QPixmap icon(pIconPathTemplate.arg(QString::number(operatorData->mcc),
-                                       QString::number(operatorData->mnc)));
+    QPixmap icon(node->getIcon());
     QRect textRect = QApplication::style()->subElementRect(QStyle::SE_ItemViewItemText, &option);
     QRect iconRect = textRect;
     QFontMetrics fontMetrics(painter->font());
@@ -28,9 +28,8 @@ void OperatorPainter::paint(QPainter *painter, const QStyleOptionViewItem &optio
     nodeViewSize.setHeight(textRect.height());
 
     if (option.state & QStyle::State_MouseOver) {
-        QPixmap plusIcon(":/ui/icons/plus.svg");
+        QPixmap plusIcon = IconDealer::getPlusIcon(iconRect.width());
         QRect plusIconRect = iconRect;
-        plusIcon = plusIcon.scaled(iconRect.width(), iconRect.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
         plusIconRect.setX(textRect.x() + textRect.width() + pElementsOffset);
         painter->drawPixmap(plusIconRect, plusIcon);
         nodeViewSize.setWidth(plusIconRect.x() + plusIcon.width());
@@ -38,7 +37,7 @@ void OperatorPainter::paint(QPainter *painter, const QStyleOptionViewItem &optio
     node->setSize(nodeViewSize);
 
     if (icon.isNull()) {
-        icon = QPixmap(":/ui/icons/question.svg");
+        icon = IconDealer::getDefaultUnknownIcon();
     }
     icon = icon.scaled(iconRect.width(), iconRect.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
     painter->drawPixmap(iconRect, icon);

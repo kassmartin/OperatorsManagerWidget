@@ -3,6 +3,7 @@
 #include <QVariant>
 #include <QList>
 #include <QSize>
+#include <QPixmap>
 
 #include <memory>
 
@@ -31,6 +32,10 @@ public:
     void setSize(const QSize &size);
     /// Returns size that node take on view.
     QSize getSize() const;
+    /// Sets view node icon.
+    void setIcon(const QPixmap &icon);
+    /// Returns view node icon.
+    QPixmap getIcon() const;
     /// Returns child nodes by index.
     TreeNode* child(int row);
     int childCount() const;
@@ -50,4 +55,5 @@ private:
     TreeNode* pParentNode;
     NodeType pType;
     QSize pNodeViewSize;
+    QPixmap pIcon;
 };

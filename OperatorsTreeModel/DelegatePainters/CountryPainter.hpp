@@ -13,8 +13,5 @@ struct CountryPainter : AbstractPainter
     /// Paints operator icon and label.
     void paint(QPainter *painter, const QStyleOptionViewItem &option,
                TreeNode *node) const override;
-
-private:
-    const QString pIconPathTemplate = "Icons/Countries/%1.png";
 };
 

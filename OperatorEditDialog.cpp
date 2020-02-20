@@ -4,7 +4,7 @@
 #include "OperatorEditDialog.hpp"
 #include "ui_OperatorEditDialog.h"
 #include "OperatorsTreeModel/NodeDatas/OperatorData.hpp"
-#include "DBManager.hpp"
+#include "IconDealer.hpp"
 
 OperatorEditDialog::OperatorEditDialog(QWidget *parent)
     : QDialog(parent), ui(new Ui::OperatorEditDialog)
@@ -32,10 +32,8 @@ void OperatorEditDialog::show()
 {
     int countryIconSize = ui->countryIconLabel->height();
 
-    setWindowIcon(QIcon(pDefaultIconPath));
-    ui->countryIconLabel->setPixmap(
-        QPixmap(pDefaultIconPath).scaled(countryIconSize, countryIconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-
+    setWindowIcon(QIcon(IconDealer::getDefaultUnknownIcon()));
+    ui->countryIconLabel->setPixmap(IconDealer::getDefaultUnknownIcon(countryIconSize));
     ui->mccInput->setReadOnly(false);
     ui->mncInput->setReadOnly(false);
 
@@ -52,19 +50,9 @@ void OperatorEditDialog::show(OperatorData *data)
     this->exec();
 }
 
-void OperatorEditDialog::setCountryIconPath(const QString &path)
+void OperatorEditDialog::setCountryIcon(const QPixmap &icon)
 {
-    const int countryIconSize = ui->countryIconLabel->height();
-    QPixmap countryIcon;
-
-    if (QFileInfo::exists(path)) {
-        countryIcon = QPixmap(path);
-    } else {
-        countryIcon = QPixmap(pDefaultIconPath);
-    }
-
-    countryIcon = countryIcon.scaled(countryIconSize, countryIconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    ui->countryIconLabel->setPixmap(countryIcon);
+    ui->countryIconLabel->setPixmap(icon);
 }
 
 void OperatorEditDialog::closeEvent(QCloseEvent *event)
@@ -78,22 +66,14 @@ void OperatorEditDialog::closeEvent(QCloseEvent *event)
 
 void OperatorEditDialog::manageIcons()
 {
-    const QString operatorIconsPathTemplate = "Icons/Operators/%1_%2.png";
-    QIcon operatorIcon;
-
     QString mcc = ui->mccInput->text();
     QString mnc = ui->mncInput->text();
     if (!mcc.isEmpty()) {
-        emit requestCountryIconPath(mcc.toInt());
+        int iconSize = ui->countryIconLabel->height();
+        emit requestCountryIconPath(mcc.toInt(), iconSize);
 
         if (!mnc.isEmpty()) {
-            QString tempIconPath = operatorIconsPathTemplate.arg(mcc, mnc);
-            if (QFileInfo::exists(tempIconPath)) {
-                operatorIcon = QIcon(tempIconPath);
-            } else {
-                operatorIcon = QIcon(pDefaultIconPath);
-            }
-            setWindowIcon(operatorIcon);
+            setWindowIcon(IconDealer::getOperatorIcon(mcc.toInt(), mnc.toInt()));
         }
     }
 }
